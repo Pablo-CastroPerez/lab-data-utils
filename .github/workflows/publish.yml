@@ -2,10 +2,10 @@ name: Publish to PyPI on Release
 
 on:
   release:
-    types: [published]   # runs when you publish a GitHub Release
+    types: [published]
 
 permissions:
-  id-token: write        # REQUIRED for PyPI Trusted Publisher (OIDC)
+  id-token: write
   contents: read
 
 jobs:
@@ -17,6 +17,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      #  print exactly what the runner sees
+      - name: Debug pyproject.toml
+        run: |
+          echo "----- locations -----"
+          find . -name pyproject.toml -maxdepth 3 -print
+          echo "----- numbered -----"
+          nl -ba pyproject.toml
+          echo "----- hexdump (first 80 lines) -----"
+          hexdump -C pyproject.toml | sed -n '1,200p'
+          echo "----- tomllib parse -----"
+          python - <<'PY'
+          import tomllib, pathlib, sys
+          p = pathlib.Path("pyproject.toml")
+          b = p.read_bytes()
+          print(b.decode("utf-8", "backslashreplace"))
+          tomllib.loads(b.decode("utf-8"))
+          print("TOML parsed OK by tomllib")
+          PY
 
       - name: Build sdist and wheel
         run: |
