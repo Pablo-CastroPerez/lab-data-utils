@@ -13,7 +13,7 @@ Includes tools for **error propagation** and **LaTeX-ready table formatting** â€
 
 ```bash
 pip install labdatautils
-
+```
 ---
 
 ## Function Reference
