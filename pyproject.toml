@@ -13,8 +13,8 @@ license = { text = "MIT" }
 dependencies = ["numpy>=1.22"]
 
 [project.urls]
-"Homepage" = "https://github.com/Pablo-CastroPerez/labdatautils"
-"Bug Tracker" = "https://github.com/Pablo-CastroPerez/labdatautils/issues"
+Homepage = "https://github.com/Pablo-CastroPerez/labdatautils"
+BugTracker = "https://github.com/Pablo-CastroPerez/labdatautils/issues"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
