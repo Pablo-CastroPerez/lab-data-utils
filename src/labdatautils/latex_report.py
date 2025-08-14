@@ -119,10 +119,8 @@ def _format_merged(val: float, err: float, style: str, sci_mode="auto") -> str:
         # Round value to the SAME absolute step
         if err_step == 0.0:
             val_rounded = val
-        elif err_exp >= 0:
-            val_rounded = round(val / err_step) * err_step   # step >= 1
         else:
-            val_rounded = round(val, -err_exp)               # step < 1
+            val_rounded = round(val, -err_exp)
 
         # Render, preserving trailing zeros implied by err_dec
         v_str = f"{val_rounded:.{err_dec}f}" if err_dec > 0 else _trim_zeros_fixed(f"{val_rounded:.0f}")
@@ -144,7 +142,7 @@ def _format_merged(val: float, err: float, style: str, sci_mode="auto") -> str:
         ev = int(math.floor(math.log10(err_abs))) if err_abs > 0 else 0
         mv = 0.0
 
-    # Absolute error rounded to 1 s.f. (defines absolute step)
+    # Absolute error rounded to 1 s.f. 
     err_step = _err_round_1sf(abs(err))[0]
 
     # Error order and leading digit (1..9)
@@ -222,26 +220,24 @@ def _format_separate(val: float, err: float, sci_mode: Union[str, bool] = "auto"
 
     # Value cell (match the same absolute resolution)
     if use_sci_val:
-        # Scientific: use value's exponent; align mantissa precision to error step
+        # Scientific: round value to the same decimal place as the (1‑s.f.) error 
         mv, ev = _mant_exp(val)
         if err_step == 0:
             mv_rounded = mv
             mant_dec = 0
         else:
-            mant_step = leading * (10.0 ** (err_order - ev))  # error step in mantissa units
-            q = mv / mant_step
-            mv_rounded = round(q) * mant_step                 # snap to grid
-            mant_dec = max(0, ev - err_order)                 # display decimals
+            mant_dec = max(0, ev - err_order)  
+            mv_rounded = round(mv, mant_dec)    
 
         mv_str = (f"{mv_rounded:.{mant_dec}f}"
                 if mant_dec > 0 else _trim_zeros_fixed(f"{mv_rounded:.0f}"))
         v_cell = rf"{mv_str} \times 10^{{{ev}}}"
     else:
-        # Fixed: round value to nearest multiple of the absolute error step
+        # Fixed: round value to the same decimal place as the (1‑s.f.) error
         if err_step == 0:
             v_lin = val
         else:
-            v_lin = round(val / err_step) * err_step
+            v_lin = round(val, -err_order)
 
         decimals = max(0, -err_order)
         v_cell = (f"{v_lin:.{decimals}f}"
