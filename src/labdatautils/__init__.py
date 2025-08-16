@@ -1,4 +1,35 @@
 from .error_propagation import propagate
 from .latex_report import generate_latex_table
+from .outliers_utils import (   
+    detect_outliers,
+    remove_outliers,
+    compute_zscores,
+    detect_outliers_zscore,
+    remove_outliers_zscore,
+    compute_mad_scores,
+    detect_outliers_mad,
+    remove_outliers_mad,
+    compute_iqr_scores,
+    detect_outliers_iqr,
+    remove_outliers_iqr,
+    compute_grubbs_scores,
+    detect_outliers_grubbs,
+    remove_outliers_grubbs,
+)
 
-__all__ = ["propagate", "generate_latex_table"]
+__all__ = ["propagate", "generate_latex_table",
+    "detect_outliers",
+    "remove_outliers",
+    "compute_zscores",
+    "detect_outliers_zscore",
+    "remove_outliers_zscore",
+    "compute_mad_scores",
+    "detect_outliers_mad",
+    "remove_outliers_mad",
+    "compute_iqr_scores",
+    "detect_outliers_iqr",
+    "remove_outliers_iqr",
+    "compute_grubbs_scores",
+    "detect_outliers_grubbs",
+    "remove_outliers_grubbs",
+]
