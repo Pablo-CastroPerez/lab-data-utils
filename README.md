@@ -1,4 +1,4 @@
-# labdatautils
+# lab-data-utils: 
 
 A Python library for **experimental data analysis and reporting**.  
 Includes tools for **error propagation** and **LaTeX-ready table formatting** — all with consistent significant-figure handling.
@@ -43,3 +43,57 @@ pip install labdatautils
   Example: `{"dx": "x", "dy": "y"}` or `["dx:x", "dy:y"]`.
 - `merge_error_style` *(str, optional)* — How to display value and error pairs:  
   `"separate"` (two columns), `"pm"` (e.g. `1.23 ± 0.04`), `"paren"` (e.g. `1.23(4)`). Default: `"separate"
+
+
+
+### 3. Outlier Detection
+
+The library provides three layers of functionality for multiple methods, z-score, modified (MAD) z-score, IQR and Grubb's test:
+
+---
+
+#### a) `compute_*` (e.g. `compute_zscores(x, **kwargs)`)
+
+**Arguments:**
+- `x` *(array-like)* — Input data.  
+- `**kwargs` — Method-specific options (e.g. `ddof` for z-scores, `threshold` for IQR).  
+
+**Returns:**
+- `scores` *(ndarray)* — Raw scores for each point (z-scores, MAD-scores, IQR-scores, or Grubbs’ G values).  
+  
+---
+
+#### b) `detect_outliers_*` (e.g. `detect_outliers_zscore(x, **kwargs)`)
+
+**Arguments:**
+- `x` *(array-like)* — Input data.  
+- `threshold` *(float, optional)* — Criterion for outliers. Default depends on method  
+  (`3.0` for z, `3.5` for MAD, `1.5` for IQR, significance level `α=0.05` for Grubbs).  
+- `verbose` *(bool, optional)* — If `True`, prints detected outliers. Default: `True`.  
+
+**Returns:**
+- `mask` *(ndarray of bool)* — Boolean array, `True` where the input is an outlier.  
+
+---
+
+#### c) `remove_outliers_*` (e.g. `remove_outliers_iqr(x, **kwargs)`)
+
+**Arguments:**
+- `x` *(array-like)* — Input data.  
+- `threshold` *(float, optional)* — Same meaning as in `detect_outliers_*`.  
+- `verbose` *(bool, optional)* — If `True`, prints which points were removed. Default: `True`.  
+
+**Returns:**
+- `cleaned` *(ndarray)* — Input data with outliers removed.  
+
+---
+
+#### General entry points
+
+Instead of calling method-specific functions, you can use the general function which have the different methods as arguments, for example:
+
+```python
+from lab_data_utils import detect_outliers, remove_outliers
+
+mask = detect_outliers(data, method="iqr", threshold=1.5)
+cleaned = remove_outliers(data, method="iqr", threshold=1.5)
