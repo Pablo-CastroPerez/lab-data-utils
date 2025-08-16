@@ -1,4 +1,4 @@
-# lab-data-utils: 
+# lab-data-utils: Laboratory Data Utilities
 
 A Python library for **experimental data analysis and reporting**.  
 Includes tools for **error propagation** and **LaTeX-ready table formatting** — all with consistent significant-figure handling.
